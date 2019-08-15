@@ -14,11 +14,11 @@ int main(int argc, char **argv, char **env)
 		input = get_input();
 		if (input == NULL)
 			break;
-		printf("%s", input);
 
 //PLAN:
 		/* get list of arguments from input */
-		//args = parse_input(input);
+		args = parse_input(input);
+		print_args(args); /* debug */
 		/* search for command in PATH */
 		//file_path = get_file(args[0], path);
 		/* run */
