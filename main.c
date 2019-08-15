@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "shell.h"
 
 int main(int argc, char **argv, char **env)
@@ -15,6 +14,7 @@ int main(int argc, char **argv, char **env)
 		input = get_input();
 		if (input == NULL)
 			break;
+		printf("%s", input);
 
 //PLAN:
 		/* get list of arguments from input */
