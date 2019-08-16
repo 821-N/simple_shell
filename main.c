@@ -23,7 +23,11 @@ int main(int argc, char **argv, char **env)
 		print_args(args); /* debug */
 
 		/* search for command in PATH */
-		//file_path = get_file(args[0], path);
+		file_path = search_path(args[0], path);
+		if (file_path)
+			printf("Found: %s\n", file_path);
+		else
+			puts("Couldn't find");
 		/* run */
 		//run_program(file_path, args, env);
 	}
