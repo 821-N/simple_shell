@@ -41,9 +41,13 @@ char *search_path(char *command, char *env_path)
 		{
 			/* Copy item from PATH, a slash, and `command` into `filepath` */
 			path_length = env_path - start;
-			_copy(filepath, start, path_length);
-			filepath[path_length] = '/';
-			_strcpy(filepath + path_length + 1, command);
+			if (path_length)
+			{
+				_copy(filepath, start, path_length);
+				filepath[path_length] = '/';
+				path_length++;
+			}
+			_strcpy(filepath + path_length, command);
 			/* check */
 			if (access(filepath, X_OK) == 0)
 				return (filepath);
