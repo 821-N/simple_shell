@@ -19,15 +19,18 @@ char *get_input(void)
 
 	if (isatty(STDIN_FILENO))
 		printf("$ ");
-	
 	linenum = getline(&b, &num, stdin);
-//	printf("linenumber ---> %ld\n", linenum);
+	//printf("linenumber ---> %ld  buf == %s\n", linenum, buf);
 	if (linenum == -1)
 	{
 		fflush(stdout);
 		if (isatty(STDIN_FILENO))
-			printf("\n");
-		return (NULL);
+			printf("eof end\n");
+		
+		return (NULL);	
 	}
+	if (linenum == 1 && buf == "\n")
+		printf ("check");
+
 	return (buf);
 }
