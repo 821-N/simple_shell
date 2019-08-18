@@ -21,8 +21,10 @@ char *get_input(void)
 		printf("$ ");
 	
 	linenum = getline(&b, &num, stdin);
+//	printf("linenumber ---> %ld\n", linenum);
 	if (linenum == -1)
 	{
+		fflush(stdout);
 		if (isatty(STDIN_FILENO))
 			printf("\n");
 		return (NULL);
