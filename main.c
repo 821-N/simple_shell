@@ -1,5 +1,7 @@
 #include "shell.h"
 
+global g;
+
 void executive(char **args, char *file_path, char **envp)
 {
 	pid_t parchild;
@@ -29,6 +31,7 @@ int main(int argc, char **argv, char **env)
 	puts(path);
 	while (1)
 	{
+		printf("%d", g.c);
 		signal(SIGINT, myhandle);
 		signal(SIGTSTP, myhandle);
 		/* display prompt and get input */
@@ -53,6 +56,6 @@ int main(int argc, char **argv, char **env)
 		
 		/* run */
 		//run_program(file_path, args, env);
-
+		g.c++;
 	}
 }
