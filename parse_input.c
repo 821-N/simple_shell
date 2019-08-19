@@ -7,15 +7,8 @@ char **parse_input(char *input)
 	int quote = 0; /* if inside quoted section */
 	char *start = NULL; /* start of arg being parsed */
 
-	printf("lol :)");
 	for(; *input; input++)
 	{
-		printf("lol :)");
-		if (input == "")
-		{
-			printf("input = null ");
-			return (NULL);
-		}
 		if ((*input <= ' ' && !quote) || (*input == '"' && quote))
 		{
 			quote = 0;
