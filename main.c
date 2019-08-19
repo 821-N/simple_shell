@@ -16,7 +16,6 @@ void executive(char **args, char *file_path, char **envp)
 		printf("child process, %s\n", args[0]);
 		execve(file_path, args, envp);
 	}
-
 	wait(NULL);
 }
 
@@ -56,13 +55,11 @@ int main(int argc, char **argv, char **env)
 				executive(args, file_path, envp);
 			}
 			else
-			{
 				puts("Couldn't find");
-			}
 			/* run */
 			//run_program(file_path, args, env);
 			g.c++;
 			i = 0;
-		}
-	}
+    }
+  }
 }
