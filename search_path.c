@@ -15,7 +15,7 @@ void _strcpy(char *dest, char *source)
 
 char *_strchr(char *str, char c)
 {
-	printf("%c\n", *str);
+	printf("str = %c\n", *str);
 	for(; *str; str++)
 	{
 		if (*str == c)
@@ -31,6 +31,8 @@ char *search_path(char *command, char *env_path)
 	ssize_t path_length;
 
 	/* If `command` contains a slash, don't check PATH: */
+	if (command == NULL)
+		return (NULL);
 	if (_strchr(command, '/'))
 	{
 		if (access(command, X_OK) == 0)
