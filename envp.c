@@ -68,7 +68,7 @@ char **make_envp(VarList *var_list)
 	size_t name_len, value_len;
 	char *env_item;
 
-	while(var_list = var_list->next)
+	while((var_list = var_list->next))
 	{
 		/* get length of name/value */
 		name_len = _strlen(var_list->name);

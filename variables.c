@@ -20,6 +20,8 @@ int _strcmp(char *s1, char *s2)
 	return (*s1 - *s2);
 }
 
+#include <string.h>
+
 /**
  * free_list - free all data in a variable list
  * @var_list: head of list
@@ -49,7 +51,7 @@ void free_list(VarList *var_list)
  */
 VarList *get_variable(VarList *var_list, char *name)
 {
-	while (var_list = var_list->next)
+	while ((var_list = var_list->next))
 	{
 		if (_strcmp(var_list->name, name) == 0)
 			return (var_list);
@@ -67,7 +69,7 @@ int remove_variable(VarList *var_list, char *name)
 {
 	VarList *prev = var_list, *curr;
 
-	while (curr = prev->next)
+	while ((curr = prev->next))
 	{
 		if (_strcmp(curr->name, name) == 0)
 		{
@@ -84,8 +86,8 @@ int remove_variable(VarList *var_list, char *name)
 /**
  * set_variable - set or add variable to var list
  * @var_list: head
- * @name: name of var (should be malloc'd)
- * @value: value of var (should be malloc'd)
+ * @name: name of var
+ * @value: value of var
  *  If variable is in list, its value is replaced with @value.
  *  Otherwise, a new item is added to the start (after head),
  *  and var_list->length is updated.
@@ -98,14 +100,14 @@ void set_variable(VarList *var_list, char *name, char *value)
 	{
 		/* replace old value */
 		free(item->value);
-		item->value = value;
+		item->value = strdup(value);
 	}
 	else /* otherwise create new variable: */
 	{
 		/* create new linked list node */
 		item = malloc(sizeof(VarList));
-		item->name = name;
-		item->value = value;
+		item->name = strdup(name);
+		item->value = strdup(value);
 		/* insert into list, after head */
 		item->next = var_list->next;
 		var_list->next = item;
