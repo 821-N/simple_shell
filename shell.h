@@ -13,6 +13,8 @@ typedef struct global
 #include <sys/types.h>
 #include <sys/wait.h>
 
+void printenv(char **ev);
+int builtin(char *args, char **ev);
 void myhandle(int mysignal);
 char *get_env_var(char **, char *);
 char *get_input(void);
