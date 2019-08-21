@@ -4,30 +4,46 @@ global g;
 
 int builtin(char *args, char **ev)
 {
-	int i = 0, n = 0;
-	char **a;
-	a[0] = "exit";
-	a[1] = "env";
+	int i = 0, n = 0, it = 0, ex = 0;
+	char *a = "exit env";
 
-	while (a[n] != NULL)
+	while (a[n] != '\0' || args[i] != '\0')
 	{
-		i == 0;
-		while (args[i] == a[n][i])
+		if (a[n] == '\0')
+			return (0);
+		if (a[n] == ' ')
+			it++;
+		if (a[n] == args[i])
 		{
-			printf("%c | %c", args[i], a[n][i]);
-			i++;
-			if (a[n][i] == '\0' && a[n][i] == args[i])
+			if (args[i] == '\0')
 				break;
+			i++;
+			n++;
+			if (a[n] == ' ')
+			{
+				i++;
+				break;
+			}
 		}
-		n++;
+		else
+		{
+			i = 0;
+			n++;
+		}
 	}
 
-	switch(n) {
+	switch(it) {
+		case 0:
+			if (args[i] <= '9' && a[i] >= '0')
+				ex = (args[i] - '0');
+			else 
+				exit(0);
+			exit(ex);
 		case 1:
-			exit(0);
-		case 2:
 			printenv(ev);
 			return (1);
+		default:
+		return (0);
 	}
 	return (0);
 }
@@ -39,9 +55,7 @@ void printenv(char **ev)
 	while (*ev)
 	{
 		while (*ev[i])
-		{
 			putchar(*ev[i++]);
-		}
 		ev++;
 	}
 }
@@ -86,30 +100,31 @@ int main(int argc, char **argv, char **env)
 		{
 			while (input[i])
 				i++;
-			if (input[i - 1] != '\n' )
-				break;
-//PLAN:		
-			if (builtin(input, envp))
+			if (input[i - 1] != '\n')
 			{
-
+				putchar('\n');
+				break;
+			}
+//PLAN:
 				/* get list of arguments from input */
-				args = parse_input(input);
+			args = parse_input(input);
 			//	print_args(args); /* debug */
 			/* search for command in PATH */
-				file_path = search_path(args[0], path);
-				if (file_path)
-				{
-					printf("Found: %s\n", file_path);
-					executive(args, file_path, envp);
-				}
-				else
+			file_path = search_path(args[0], path);
+			if (file_path)
+			{
+				printf("Found: %s\n", file_path);
+				executive(args, file_path, envp);
+			}
+			else
+			{
+				if (!(builtin(input, envp)))
 					puts("Couldn't find");
 			}
+		}
 			/* run */
 			//run_program(file_path, args, env);
-			g.c++;
-			i = 0;
-			
-	    }
+		g.c++;
+		i = 0;
 	}
 }
