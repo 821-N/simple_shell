@@ -2,6 +2,80 @@
 
 global g;
 
+int erro(int linenum, char *argv, char *com, int er_id)
+{
+	er_puts(argv);
+	er_puts(": ");
+	er_puts(itoa(linenum));
+	er_puts(": ");
+	er_puts(com);
+	er_puts(": ");
+	if (er_id == 0)
+	{
+		er_puts("not found\n");
+		return (0);
+	}
+	return (0);
+}
+
+int builtin(char *args, char **ev)
+{
+	int i = 0, n = 0, it = 0, ex = 0;
+	char *a = "exit env";
+
+	while (a[n] != '\0' || args[i] != '\0')
+	{
+		if (a[n] == '\0')
+			return (0);
+		if (a[n] == ' ')
+			it++;
+		if (a[n] == args[i])
+		{
+			if (args[i] == '\0')
+				break;
+			i++;
+			n++;
+			if (a[n] == ' ')
+			{
+				i++;
+				break;
+			}
+		}
+		else
+		{
+			i = 0;
+			n++;
+		}
+	}
+
+	switch(it) {
+		case 0:
+			if (args[i] <= '9' && a[i] >= '0')
+				ex = (args[i] - '0');
+			else 
+				exit(0);
+			exit(ex);
+		case 1:
+			printenv(ev);
+			return (1);
+		default:
+		return (0);
+	}
+	return (0);
+}
+
+void printenv(char **ev)
+{
+	int i = 0;
+
+	while (*ev)
+	{
+		while (*ev[i])
+			pchar(*ev[i++]);
+		ev++;
+	}
+}
+
 /**
  * str - convert a number to a string
  * @num: (should be "small", not INT_MAX or something silly)
@@ -58,27 +132,19 @@ int executive(char **args, char *file_path, VarList *var_list)
 	return (status);
 }
 
-void oh_no(int code)
-{
-	
-	
-}
-
 int main(int argc, char **argv, char **envp)
 {
 	char *input, **args, *file_path;
 	char *env_path;
-	int status;
+	int status,i = 0, n = 0;
 	VarList variables;
-
 	read_envp(&variables, envp);
 
 	(void)argc;
 	(void)argv;
-
+  
 	while (1)
 	{
-		printf("%d", g.c);
 		signal(SIGINT, myhandle);
 		signal(SIGTSTP, myhandle);
 
@@ -90,7 +156,13 @@ int main(int argc, char **argv, char **envp)
 			dprintf(STDERR_FILENO,"exiting!");
 			return (0);
 		}
-
+    while (input[i])
+				i++;
+		if (input[i - 1] != '\n')
+		{
+			write(STDOUT_FILENO, "\n$ \n", 4);
+			break;
+		}
 		/* get list of arguments from input */
 		args = parse_input(input, &variables);
 		//	print_args(args); /* debug */
@@ -113,9 +185,17 @@ int main(int argc, char **argv, char **envp)
 				status = executive(args, file_path, &variables);
 			}
 			else
-				puts("Couldn't find");
-		}
-
+      {
+        n = 0;
+				while (input[n++] == ' ')
+        {
+        }
+				if (n != i)
+					erro(g.c, argv[0], args[0], 0);
+      }
+    }
+      
+    i = 0;
 		g.c++;
   }
 }

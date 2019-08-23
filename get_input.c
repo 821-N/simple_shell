@@ -4,12 +4,13 @@ void myhandle(int mysignal)
 {
 	if (mysignal == SIGINT)
 	{
-		printf("\n$ ");
+		write(STDOUT_FILENO, "\n$ ", 3);
 		fflush(stdout);
 		return;
 	}
 	if (mysignal ==  SIGTSTP)
-		;
+	{
+	}
 }
 
 /**
@@ -22,7 +23,7 @@ char *get_input(void)
 	static char buf[5000];
 	char *b = buf;
 	size_t num = sizeof(buf);
-	ssize_t linenum;
+	int linenum;
 	int i = 0;
 	static int exit_next_time = 0;
 
@@ -44,7 +45,7 @@ char *get_input(void)
 	{
 		fflush(stdout);
 		if (isatty(STDIN_FILENO))
-			printf("\n");
+			write(STDOUT_FILENO, "\n", 1);
 		return (NULL);
 	}
 

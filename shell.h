@@ -27,6 +27,13 @@ typedef struct VarList {
 
 int _strcmp(char *, char *);
 
+int erro(int linenum, char *argv, char *com, int er_id);
+char *itoa(int i);
+void er_puts(char *a);
+int pchar(char a);
+void _puts(char *a);
+void printenv(char **ev);
+int builtin(char *args, char **ev);
 void myhandle(int mysignal);
 char *get_input(void);
 char **parse_input(char *, VarList *);
