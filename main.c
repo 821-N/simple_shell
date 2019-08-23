@@ -2,6 +2,12 @@
 
 global g;
 
+int errono()
+{
+	
+	return (0);
+}
+
 int builtin(char *args, char **ev)
 {
 	int i = 0, n = 0, it = 0, ex = 0;
@@ -55,7 +61,7 @@ void printenv(char **ev)
 	while (*ev)
 	{
 		while (*ev[i])
-			putchar(*ev[i++]);
+			pchar(*ev[i++]);
 		ev++;
 	}
 }
@@ -68,11 +74,12 @@ void executive(char **args, char *file_path, char **envp)
 	parchild = fork();
 
 	if (parchild < 0)
-		printf("fail\n");
+		exit(0);
+		//printf("fail\n");
 
 	else if (parchild == 0)
 	{
-		printf("child process, %s\n", args[0]);
+		//printf("child process, %s\n", args[0]);
 		execve(file_path, args, envp);
 	}
 	wait(NULL);
@@ -81,18 +88,17 @@ void executive(char **args, char *file_path, char **envp)
 
 int main(int argc, char **argv, char **env)
 {
-	char *input, **args, *file_path, **sargs;
-	char *path = get_env_var(env, "PATH");
-	int hold, status, e, i = 0;
+	(void)argv;
+	(void)argc;
+	char *input, **args, *file_path, *path = get_env_var(env, "PATH");
+	int i = 0, n = 0;
 	char **envp = env;
-
-	puts(path);
+	
+	//puts(path);
 	while (1)
 	{
-		printf("%d", g.c);
 		signal(SIGINT, myhandle);
 		signal(SIGTSTP, myhandle);
-		/* display prompt and get input */
 		input = get_input();
 		if (input == NULL)
 			return (0);
@@ -102,29 +108,24 @@ int main(int argc, char **argv, char **env)
 				i++;
 			if (input[i - 1] != '\n')
 			{
-				putchar('\n');
+				write(STDOUT_FILENO, "\n$ \n", 4);
 				break;
 			}
-//PLAN:
-				/* get list of arguments from input */
 			args = parse_input(input);
-			//	print_args(args); /* debug */
-			/* search for command in PATH */
 			file_path = search_path(args[0], path);
 			if (file_path)
-			{
-				printf("Found: %s\n", file_path);
 				executive(args, file_path, envp);
-			}
 			else
 			{
-				if (!(builtin(input, envp)))
-					puts("Couldn't find");
+				n = 0;
+				while (input[n++] == ' ')
+					;
+				if (!(builtin(input, envp)) && n != i)
+					_puts("Couldn't find\n");
 			}
 		}
-			/* run */
-			//run_program(file_path, args, env);
 		g.c++;
 		i = 0;
 	}
+	return (0);
 }

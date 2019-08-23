@@ -15,7 +15,6 @@ void _strcpy(char *dest, char *source)
 
 char *_strchr(char *str, char c)
 {
-	printf("str = %c\n", *str);
 	for(; *str; str++)
 	{
 		if (*str == c)
