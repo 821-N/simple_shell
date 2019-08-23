@@ -25,7 +25,7 @@ char *_strchr(char *str, char c)
 
 char *search_path(char *command, char *env_path)
 {
-	static char filepath[4096];
+	static char filepath[PATH_MAX];
 	char *start = env_path;
 	ssize_t path_length;
 

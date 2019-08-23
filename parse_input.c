@@ -1,6 +1,6 @@
 #include "shell.h"
 
-char **parse_input(char *input)
+char **parse_input(char *input, VarList *var_list)
 {
 	static char *arglist[1000];
 	int argi = 0; /* number of args */
