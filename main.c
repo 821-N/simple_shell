@@ -156,16 +156,12 @@ int main(int argc, char **argv, char **envp)
 			dprintf(STDERR_FILENO,"exiting!");
 			return (0);
 		}
-    while (input[i])
-				i++;
-		if (input[i - 1] != '\n')
-		{
-			write(STDOUT_FILENO, "\n$ \n", 4);
-			break;
-		}
 		/* get list of arguments from input */
 		args = parse_input(input, &variables);
 		//	print_args(args); /* debug */
+
+		if (args[0] == NULL)
+			continue;
 
 		/* check if command is a builtin, and run it */
 		if (!run_builtins(args, &variables))
@@ -186,16 +182,9 @@ int main(int argc, char **argv, char **envp)
 			}
 			else
       {
-        n = 0;
-				while (input[n++] == ' ')
-        {
-        }
-				if (n != i)
-					erro(g.c, argv[0], args[0], 0);
+				erro(g.c, argv[0], args[0], 0);
       }
     }
-      
-    i = 0;
 		g.c++;
   }
 }
