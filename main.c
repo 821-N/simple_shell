@@ -2,9 +2,19 @@
 
 global g;
 
-int errono()
+int erro(int linenum, char *argv, char *com, int er_id)
 {
-	
+	er_puts(argv);
+	er_puts(": ");
+	er_puts(itoa(linenum));
+	er_puts(": ");
+	er_puts(com);
+	er_puts(": ");
+	if (er_id == 0)
+	{
+		er_puts("not found\n");
+		return (0);
+	}
 	return (0);
 }
 
@@ -121,7 +131,7 @@ int main(int argc, char **argv, char **env)
 				while (input[n++] == ' ')
 					;
 				if (!(builtin(input, envp)) && n != i)
-					_puts("Couldn't find\n");
+					erro(g.c, argv[0], args[0], 0);
 			}
 		}
 		g.c++;

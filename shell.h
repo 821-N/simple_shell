@@ -13,6 +13,9 @@ typedef struct global
 #include <sys/types.h>
 #include <sys/wait.h>
 
+int erro(int linenum, char *argv, char *com, int er_id);
+char *itoa(int i);
+void er_puts(char *a);
 int pchar(char a);
 void _puts(char *a);
 void printenv(char **ev);
