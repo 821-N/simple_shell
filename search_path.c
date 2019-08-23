@@ -35,7 +35,10 @@ char *search_path(char *command, char *env_path)
 	if (_strchr(command, '/'))
 	{
 		if (access(command, X_OK) == 0)
+		{
+			printf("big check\n");
 			return (command);
+		}
 		return (NULL);
 	}
 	/* Other wise, search PATH */
@@ -54,7 +57,10 @@ char *search_path(char *command, char *env_path)
 			_strcpy(filepath + path_length, command);
 			/* check */
 			if (access(filepath, X_OK) == 0)
+			{
+				printf("big check\n");
 				return (filepath);
+			}
 			if (*env_path == '\0')
 				break; /* reached end without finding anything */
 			start = env_path + 1;
