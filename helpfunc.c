@@ -32,4 +32,5 @@ void *safe_malloc(size_t size)
 		er_puts("Failed to allocate memory!\n");
 		exit(1);
 	}
+	return (x);
 }

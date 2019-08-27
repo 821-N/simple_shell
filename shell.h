@@ -55,4 +55,6 @@ VarList *get_variable(VarList *, char *);
 int remove_varible(VarList*, char *);
 void set_variable(VarList*, char *, char *);
 
+void *safe_malloc(size_t);
+
 #endif
