@@ -92,9 +92,11 @@ int main(int argc, char **argv, char **envp)
 		}
 		else if (status >= 0)
 		{
+			free(input);
 			free_list(&variables);
 			return (status);
 		}
+		free(input);
 	}
 	return (0);
 }

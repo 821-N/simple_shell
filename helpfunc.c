@@ -23,3 +23,13 @@ void _puts(char *a)
 
 	write(STDOUT_FILENO, a, i);
 }
+
+void *safe_malloc(size_t size)
+{
+	void *x = malloc(size);
+	if (!x)
+	{
+		er_puts("Failed to allocate memory!\n");
+		exit(1);
+	}
+}

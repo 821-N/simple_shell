@@ -112,7 +112,7 @@ void set_variable(VarList *var_list, char *name, char *value)
 	else /* otherwise create new variable: */
 	{
 		/* create new linked list node */
-		item = malloc(sizeof(VarList));
+		item = safe_malloc(sizeof(VarList));
 		item->name = strdup(name);
 		item->value = strdup(value);
 		/* insert into list, after head */
