@@ -12,21 +12,28 @@ char **parse_input(char *input, VarList *var_list)
 	int argi = 0; /* number of args */
 	int quote = 0; /* if inside quoted section */
 	char *start = NULL; /* start of arg being parsed */
+	char c;
 
 	(void)var_list;
 	for (; *input; input++)
 	{
-		if ((*input <= ' ' && !quote) || (*input == '"' && quote))
+		c = *input;
+		if (((c == ' ' || c == '\n') && !quote) || (c == '"' && quote))
 		{
-			quote = 0;
 			if (start)
 			{
+				if (*start == '#' && !quote)
+				{
+					start = NULL;
+					break;
+				}
 				*input = '\0';
 				arglist[argi++] = start;
 				start = NULL;
 			}
+			quote = 0;
 		}
-		else if (*input == '"')
+		else if (c == '"')
 		{
 			quote = 1;
 			if (!start)
@@ -36,8 +43,10 @@ char **parse_input(char *input, VarList *var_list)
 			if (!start)
 				start = input;
 	}
-	if (start)
+	if (start && (*start != '#' || quote))
+	{
 		arglist[argi++] = start;
+	}
 	arglist[argi] = NULL;
 	return (arglist);
 }
