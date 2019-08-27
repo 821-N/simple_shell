@@ -39,7 +39,7 @@ void myhandle(int mysignal);
 char *get_input(void);
 char **parse_input(char *, VarList *);
 void print_args(char **);
-char *search_path(char *, char *, char *, int);
+int search_path(char *, char *, char **);
 int run_builtins(char **args, VarList *var_list, char **ev, char *av, int lnum);
 void do_alias(char **);
 
