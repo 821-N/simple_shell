@@ -23,7 +23,7 @@ char *_strchr(char *str, char c)
 	return (NULL);
 }
 
-char *search_path(char *command, char *env_path)
+char *search_path(char *command, char *env_path, char *av, int lnum)
 {
 	static char filepath[PATH_MAX];
 	char *start = env_path;
@@ -34,11 +34,16 @@ char *search_path(char *command, char *env_path)
 		return (NULL);
 	if (_strchr(command, '/'))
 	{
-		if (access(command, X_OK) == 0)
+		if (access(command, F_OK) != 0)
 		{
-			printf("big check\n");
-			return (command);
+			erro(lnum, av, command, 0);
+			return (NULL);
 		}
+		
+		if (access(command, X_OK) == 0)
+			return (command);
+		else
+			erro(lnum, av, command, 1);
 		return (NULL);
 	}
 	/* Other wise, search PATH */
@@ -56,10 +61,18 @@ char *search_path(char *command, char *env_path)
 			}
 			_strcpy(filepath + path_length, command);
 			/* check */
-			if (access(filepath, X_OK) == 0)
+
+			if (access(command, F_OK) != 0 && *env_path == '\0')
 			{
-				printf("big check\n");
+				erro(lnum, av, command, 0);
+				return (NULL);
+			}
+			if (access(filepath, X_OK) == 0)
 				return (filepath);
+			else if (access(command, F_OK) == 0)
+			{
+				erro(lnum, av, command, 1);
+				return (NULL);
 			}
 			if (*env_path == '\0')
 				break; /* reached end without finding anything */

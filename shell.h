@@ -38,7 +38,7 @@ void myhandle(int mysignal);
 char *get_input(void);
 char **parse_input(char *, VarList *);
 void print_args(char **);
-char *search_path(char *, char *);
+char *search_path(char *, char *, char *, int);
 int run_builtins(char **args, VarList *var_list, char **ev);
 void do_alias(char **);
 

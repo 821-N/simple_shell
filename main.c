@@ -114,16 +114,12 @@ int main(int argc, char **argv, char **envp)
 			/* search for command in PATH */
 			env_path = get_variable(&variables, "PATH")->value;
 			/* TODO: check if get_variable failed to find PATH */
-			file_path = search_path(args[0], env_path);
+			file_path = search_path(args[0], env_path, argv[0], g.c);
 			if (file_path)
 			{
 				printf("Found: %s\n", file_path);
 				status = executive(args, file_path, &variables);
 			}
-			else
-      {
-				erro(g.c, argv[0], args[0], 0);
-      }
+		}
     }
-  }
 }
