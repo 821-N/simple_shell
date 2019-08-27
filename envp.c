@@ -45,7 +45,7 @@ void read_envp(VarList *var_list, char **envp)
 	{
 		item = *envp;
 		/* create node */
-		tail = tail->next = malloc(sizeof(VarList));
+		tail = tail->next = safe_malloc(sizeof(VarList));
 		/* separate "NAME=VALUE" string into name and value */
 		for (name_len = 0; item[name_len] != '='; name_len++)
 			if (item[name_len] == '\0') /* found invalid item */
@@ -53,10 +53,10 @@ void read_envp(VarList *var_list, char **envp)
 		for (value_len = 0; item[name_len + 1 + value_len]; value_len++)
 			;
 		/* copy name/value into varlist */
-		tail->name = malloc(name_len + 1);
+		tail->name = safe_malloc(name_len + 1);
 		_memcpy(tail->name, item, name_len);
 		tail->name[name_len] = '\0';
-		tail->value = malloc(value_len + 1);
+		tail->value = safe_malloc(value_len + 1);
 		_memcpy(tail->value, item + name_len + 1, value_len + 1);
 		/* update length and move to next item */
 		var_list->length++;
@@ -75,7 +75,7 @@ void read_envp(VarList *var_list, char **envp)
  */
 char **make_envp(VarList *var_list)
 {
-	char **envp = malloc((var_list->length + 1) * sizeof(char *));
+	char **envp = safe_malloc((var_list->length + 1) * sizeof(char *));
 	char **curr = envp;
 	size_t name_len, value_len;
 	char *env_item;
@@ -86,7 +86,7 @@ char **make_envp(VarList *var_list)
 		name_len = _strlen(var_list->name);
 		value_len = _strlen(var_list->value);
 		/* allocate item and copy data into it */
-		env_item = malloc(name_len + 1 + value_len + 1);
+		env_item = safe_malloc(name_len + 1 + value_len + 1);
 		_memcpy(env_item, var_list->name, name_len);
 		env_item[name_len] = '=';
 		_memcpy(env_item + name_len + 1, var_list->value, value_len);
