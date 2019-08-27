@@ -46,60 +46,70 @@ char *_strchr(char *str, char c)
  * search_path - searches path for program
  * @command: the command
  * @env_path: PATH
- * @av: argument
- * @lnum: linenumber
- * Return: filepath or NULL
+ * @filepath_out: pointer to file path output
+ * Return: 0 (ok), 1 (file not found), 2 (permission error)
  */
-char *search_path(char *command, char *env_path, char *av, int lnum)
+int search_path(char *command, char *env_path, char **filepath_out)
 {
 	static char filepath[PATH_MAX];
 	char *start = env_path;
 	ssize_t path_length;
+	int found_file = 0;
 
 	if (command == NULL)
-		return (NULL);
+		return (2);
+	/* If command contains a slash, don't check PATH */
 	if (_strchr(command, '/'))
 	{
-		if (access(command, F_OK) != 0)
+		/* If file exists: */
+		if (access(command, F_OK) == 0)
 		{
-			erro(lnum, av, command, NULL, 0);
-			return (NULL);
+			found_file = 1;
+			/* If can be executed: */
+			if (access(command, X_OK) == 0)
+			{
+				*filepath_out = command;
+				return (0);
+			}
 		}
-		if (access(command, X_OK) == 0)
-			return (command);
-		else
-			erro(lnum, av, command, NULL, 1);
-		return (NULL);
 	}
-	while (1)
+	else
 	{
-		if (*env_path == ':' || *env_path == '\0')
+		while (1)
 		{
-			path_length = env_path - start;
-			if (path_length)
+			if (*env_path == ':' || *env_path == '\0')
 			{
-				_copy(filepath, start, path_length);
-				filepath[path_length] = '/';
-				path_length++;
+				/* Copy PATH item and command into file_path */
+				path_length = env_path - start;
+				if (path_length)
+				{
+					_copy(filepath, start, path_length);
+					filepath[path_length] = '/';
+					path_length++;
+				}
+				_strcpy(filepath + path_length, command);
+				/* Check file */
+				if (access(filepath, F_OK) == 0)
+				{
+					found_file = 1;
+					if (access(filepath, X_OK) == 0)
+					{
+						*filepath_out = filepath;
+						return (0);
+					}
+				}
+				/* reached end of PATH */
+				if (*env_path == '\0')
+					break;
+				start = env_path + 1;
 			}
-			_strcpy(filepath + path_length, command);
-			if (access(command, F_OK) != 0 && *env_path == '\0')
-			{
-				erro(lnum, av, command, NULL, 0);
-				return (NULL);
-			}
-			if (access(filepath, X_OK) == 0)
-				return (filepath);
-			else if (access(command, F_OK) == 0)
-			{
-				erro(lnum, av, command, NULL, 1);
-				return (NULL);
-			}
-			if (*env_path == '\0')
-				break; /* reached end without finding anything */
-			start = env_path + 1;
+			++env_path;
 		}
-		++env_path;
 	}
-	return (NULL);
+
+	/* If no file was found: */
+	if (!found_file)
+		return (1);
+	/* Otherwise, if a file was found but couldn't be executed: */
+	return (2);
 }
