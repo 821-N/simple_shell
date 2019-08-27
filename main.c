@@ -64,7 +64,6 @@ int main(int argc, char **argv, char **envp)
 
 	read_envp(&variables, envp);
 	(void)argc;
-	(void)argv;
 	while (1)
 	{
 		line_num++;
@@ -81,8 +80,7 @@ int main(int argc, char **argv, char **envp)
 			continue;
 		b = run_builtins(args, argv[0], &variables, line_num, &status);
 		if (!b)
-		{
-			/*do_alias(args);*/
+		{ /*do_alias(args);*/
 			env_path = get_variable(&variables, "PATH")->value;
 			b = search_path(args[0], env_path, &file_path);
 			if (b == 0)

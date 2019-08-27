@@ -63,14 +63,15 @@ int builtin_unsetenv(char **args, char *shell, VarList *var_list, int lnum)
  * @shell: name of shell executable
  * @var_list: environment variables
  * @lnum: line number
+ * @ec: exit code output
  * Return: 0 (no builtin), 1 (builtin ran), -1 (exit)
  */
-int run_builtins(char **args, char *shell, VarList *var_list, int lnum, int *ec)
+int run_builtins(char **args,
+								 char *shell, VarList *var_list, int lnum, int *ec)
 {
 	int i = 0;
 
 	*ec = 0;
-
 	if (!_strcmp(args[0], "setenv"))
 	{
 		*ec = builtin_setenv(args, shell, var_list, lnum);
@@ -81,13 +82,11 @@ int run_builtins(char **args, char *shell, VarList *var_list, int lnum, int *ec)
 		*ec = builtin_unsetenv(args, shell, var_list, lnum);
 		return (1);
 	}
-
 	if (!_strcmp(args[0], "env"))
 	{
 		printenv(var_list);
 		return (1);
 	}
-
 	if (!_strcmp(args[0], "exit"))
 	{
 		if (args[1])
@@ -103,6 +102,5 @@ int run_builtins(char **args, char *shell, VarList *var_list, int lnum, int *ec)
 			erro(lnum, shell, args[0], args[1], 2);
 		return (1);
 	}
-
 	return (0);
 }
