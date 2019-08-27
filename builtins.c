@@ -1,21 +1,11 @@
 #include "shell.h"
 
-int run_builtins(char **args, VarList *var_list)
+int run_builtins(char **args, VarList *var_list, char **ev)
 {
 	VarList *item;
 
 	if (args[0] == NULL)
 		return (0);
-
-	if (!_strcmp(args[0], "pv"))
-	{
-		item = get_variable(var_list, args[1]);
-		if (item)
-			printf("%s\n", item->value);
-		else
-			printf("variable not found\n");
-		return (1);
-	}
 	if (!_strcmp(args[0], "setenv"))
 	{
 		if (args[1] && args[2])
@@ -23,5 +13,21 @@ int run_builtins(char **args, VarList *var_list)
 		return (1);
 	}
 
+	if (!_strcmp(args[0], "env"))
+	{
+		printenv(ev);
+		return (1);
+	}
+
+	if (!_strcmp(args[0], "exit"))
+	{
+	
+		if (args[1])
+		{
+			printf("args 1 %s\n", args[1]);
+			exit(_atoi(args[1]));
+		}
+		exit(0);
+	}
 	return (0);
 }

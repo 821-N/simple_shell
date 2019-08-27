@@ -2,77 +2,16 @@
 
 global g;
 
-int erro(int linenum, char *argv, char *com, int er_id)
-{
-	er_puts(argv);
-	er_puts(": ");
-	er_puts(itoa(linenum));
-	er_puts(": ");
-	er_puts(com);
-	er_puts(": ");
-	if (er_id == 0)
-	{
-		er_puts("not found\n");
-		return (0);
-	}
-	return (0);
-}
-
-int builtin(char *args, char **ev)
-{
-	int i = 0, n = 0, it = 0, ex = 0;
-	char *a = "exit env";
-
-	while (a[n] != '\0' || args[i] != '\0')
-	{
-		if (a[n] == '\0')
-			return (0);
-		if (a[n] == ' ')
-			it++;
-		if (a[n] == args[i])
-		{
-			if (args[i] == '\0')
-				break;
-			i++;
-			n++;
-			if (a[n] == ' ')
-			{
-				i++;
-				break;
-			}
-		}
-		else
-		{
-			i = 0;
-			n++;
-		}
-	}
-
-	switch(it) {
-		case 0:
-			if (args[i] <= '9' && a[i] >= '0')
-				ex = (args[i] - '0');
-			else 
-				exit(0);
-			exit(ex);
-		case 1:
-			printenv(ev);
-			return (1);
-		default:
-		return (0);
-	}
-	return (0);
-}
-
 void printenv(char **ev)
 {
 	int i = 0;
 
-	while (*ev)
+
+	while (ev[i])
 	{
-		while (*ev[i])
-			pchar(*ev[i++]);
-		ev++;
+		_puts(ev[i]);
+		pchar('\n');
+		i++;
 	}
 }
 
@@ -145,6 +84,7 @@ int main(int argc, char **argv, char **envp)
   
 	while (1)
 	{
+		g.c++;
 		signal(SIGINT, myhandle);
 		signal(SIGTSTP, myhandle);
 
@@ -164,7 +104,7 @@ int main(int argc, char **argv, char **envp)
 			continue;
 
 		/* check if command is a builtin, and run it */
-		if (!run_builtins(args, &variables))
+		if (!run_builtins(args, &variables, envp))
 		{
 			/* otherwise ... */
 
@@ -185,6 +125,5 @@ int main(int argc, char **argv, char **envp)
 				erro(g.c, argv[0], args[0], 0);
       }
     }
-		g.c++;
   }
 }

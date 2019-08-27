@@ -26,7 +26,7 @@ typedef struct VarList {
 } VarList;
 
 int _strcmp(char *, char *);
-
+int _atoi(char *a);
 int erro(int linenum, char *argv, char *com, int er_id);
 char *itoa(int i);
 void er_puts(char *a);
@@ -39,7 +39,7 @@ char *get_input(void);
 char **parse_input(char *, VarList *);
 void print_args(char **);
 char *search_path(char *, char *);
-int run_builtins(char **, VarList *);
+int run_builtins(char **args, VarList *var_list, char **ev);
 void do_alias(char **);
 
 char *str(int, int);
