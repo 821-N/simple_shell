@@ -33,14 +33,14 @@ char *itoa(int i);
 void er_puts(char *a);
 int pchar(char a);
 void _puts(char *a);
-void printenv(char **ev);
+void printenv(VarList *);
 int builtin(char *args, char **ev);
 void myhandle(int mysignal);
 char *get_input(void);
 char **parse_input(char *, VarList *);
 void print_args(char **);
 int search_path(char *, char *, char **);
-int run_builtins(char **args, VarList *var_list, char **ev, char *av, int lnum);
+int run_builtins(char **args, char *shell, VarList *var_list, int lnum);
 void do_alias(char **);
 
 char *str(int, int);

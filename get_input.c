@@ -38,7 +38,6 @@ char *get_input(void)
 	}
 
 	linenum = getline(&b, &num, stdin);
-	//printf("linenumber ---> %ld \n", linenum);
 
 	/* end of input */
 	if (linenum == -1)
