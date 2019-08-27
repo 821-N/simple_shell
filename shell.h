@@ -52,7 +52,7 @@ void pid_envp(char **, pid_t);
 
 void free_list(VarList *);
 VarList *get_variable(VarList *, char *);
-int remove_varible(VarList*, char *);
+int remove_variable(VarList*, char *);
 void set_variable(VarList*, char *, char *);
 
 void *safe_malloc(size_t);

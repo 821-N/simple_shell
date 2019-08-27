@@ -21,6 +21,26 @@ int parse_number(char *a)
 	return (num);
 }
 
+void builtin_setenv(char **args, char *shell, VarList *var_list, int lnum)
+{
+	if (!args[1] || !args[2] || args[3])
+	{
+		erro(lnum, shell, args[0], "VARIABLE VALUE", 3);
+		return;
+	}
+	set_variable(var_list, args[1], args[2]);
+}
+
+void builtin_unsetenv(char **args, char *shell, VarList *var_list, int lnum)
+{
+	if (!args[1] || args[2])
+	{
+		erro(lnum, shell, args[0], "VARIABLE", 3);
+		return;
+	}
+	remove_variable(var_list, args[1]);
+}
+
 /**
  * run_builtins - try to run command as a builtin
  * @args: arguments (command is args[0])
@@ -38,8 +58,12 @@ int run_builtins(char **args, char *shell, VarList *var_list, int lnum)
 
 	if (!_strcmp(args[0], "setenv"))
 	{
-		if (args[1] && args[2])
-			set_variable(var_list, args[1], args[2]);
+		builtin_setenv(args, shell, var_list, lnum);
+		return (-1);
+	}
+	if (!_strcmp(args[0], "unsetenv"))
+	{
+		builtin_unsetenv(args, shell, var_list, lnum);
 		return (-1);
 	}
 

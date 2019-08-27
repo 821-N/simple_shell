@@ -64,5 +64,14 @@ int erro(int linenum, char *argv, char *com, char *exstr, int er_id)
 		er_puts("\n");
 		return (2);
 	}
+	else if (er_id == 3)
+	{
+		er_puts("Usage: ");
+		er_puts(com);
+		er_puts(" ");
+		er_puts(exstr);
+		er_puts("\n");
+		return (1);
+	}
 	return (0);
 }
