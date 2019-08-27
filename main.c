@@ -2,12 +2,12 @@
 
 /**
  * printenv - prints the enviroment
- * @ev: the enviroment
- * Return: void
+ * @var_list: variables
  */
 void printenv(VarList *var_list)
 {
 	VarList *item = var_list;
+
 	while ((item = item->next))
 	{
 		_puts(item->name);
@@ -80,7 +80,7 @@ int main(int argc, char **argv, char **envp)
 		if (args[0] == NULL)
 			continue;
 		status = run_builtins(args, argv[0], &variables, line_num);
-		if(status == -2)
+		if (status == -2)
 		{
 			/*do_alias(args);*/
 			env_path = get_variable(&variables, "PATH")->value;

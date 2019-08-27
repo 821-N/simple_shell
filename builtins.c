@@ -11,9 +11,9 @@ int parse_number(char *a)
 
 	if (a == NULL)
 		return (-1);
-	for(i = 0; a[i]; i++)
+	for (i = 0; a[i]; i++)
 	{
-		if(a[i] >= '0' && a[i] <= '9')
+		if (a[i] >= '0' && a[i] <= '9')
 			num = num * 10 + (a[i] - '0');
 		else
 			return (-1);
@@ -24,6 +24,7 @@ int parse_number(char *a)
 /**
  * run_builtins - try to run command as a builtin
  * @args: arguments (command is args[0])
+ * @shell: name of shell executable
  * @var_list: environment variables
  * @lnum: line number
  * Return: -2 (no builtin found), -1 (builtin found), other (exit code)
@@ -56,8 +57,7 @@ int run_builtins(char **args, char *shell, VarList *var_list, int lnum)
 			i = 0;
 		if (i >= 0)
 			return (i);
-		else
-			erro(lnum, shell, args[0], args[1], 2);
+		erro(lnum, shell, args[0], args[1], 2);
 		return (-1);
 	}
 

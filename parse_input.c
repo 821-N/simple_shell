@@ -1,5 +1,11 @@
 #include "shell.h"
 
+/**
+ * parse_input - parse input command
+ * @input: input
+ * @var_list: env vars
+ * Return: array of argument strings
+ */
 char **parse_input(char *input, VarList *var_list)
 {
 	static char *arglist[1000];
@@ -36,6 +42,10 @@ char **parse_input(char *input, VarList *var_list)
 	return (arglist);
 }
 
+/**
+ * print_args - print arg list (for debug)
+ * @args: arg list
+ */
 void print_args(char **args)
 {
 	int i;
