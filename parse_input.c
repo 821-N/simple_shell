@@ -44,9 +44,7 @@ char **parse_input(char *input, VarList *var_list)
 				start = input;
 	}
 	if (start && (*start != '#' || quote))
-	{
 		arglist[argi++] = start;
-	}
 	arglist[argi] = NULL;
 	return (arglist);
 }

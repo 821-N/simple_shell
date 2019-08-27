@@ -1,12 +1,6 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-typedef struct global
-{
-	int c;
-} global;
-
-#include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -14,10 +8,22 @@ typedef struct global
 #include <sys/wait.h>
 #include <limits.h>
 
-typedef struct VarList {
+/**
+ * struct VarList - node of linked list for storing env vars. See variables.c
+ * @next: pointer to next node
+ * @length: length of list (first node only)
+ * @name: var name
+ * @value: var value
+ * Betty doesn't support nested structs/unions so it will give warnings here.
+ * oh well
+ */
+typedef struct VarList
+{
 	struct VarList *next;
-	union {
-		struct {
+	union
+	{
+		struct
+		{
 			char *name;
 			char *value;
 		};
@@ -40,7 +46,7 @@ char *get_input(void);
 char **parse_input(char *, VarList *);
 void print_args(char **);
 int search_path(char *, char *, char **);
-int run_builtins(char **args, char *shell, VarList *var_list, int lnum);
+int run_builtins(char **args, char *shell, VarList *var_list, int lnum, int *);
 void do_alias(char **);
 
 char *str(int, int);

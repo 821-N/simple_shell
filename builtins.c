@@ -21,24 +21,40 @@ int parse_number(char *a)
 	return (num);
 }
 
-void builtin_setenv(char **args, char *shell, VarList *var_list, int lnum)
+/**
+ * builtin_setenv - setenv builtin command
+ * @args: arguments (command is args[0])
+ * @shell: name of shell executable
+ * @var_list: environment variables
+ * @lnum: line number
+ * Return: exit code
+ */
+int builtin_setenv(char **args, char *shell, VarList *var_list, int lnum)
 {
 	if (!args[1] || !args[2] || args[3])
 	{
-		erro(lnum, shell, args[0], "VARIABLE VALUE", 3);
-		return;
+		return (erro(lnum, shell, args[0], "VARIABLE VALUE", 3));
 	}
 	set_variable(var_list, args[1], args[2]);
+	return (0);
 }
 
-void builtin_unsetenv(char **args, char *shell, VarList *var_list, int lnum)
+/**
+ * builtin_unsetenv - unsetenv builtin command
+ * @args: arguments (command is args[0])
+ * @shell: name of shell executable
+ * @var_list: environment variables
+ * @lnum: line number
+ * Return: exit code
+ */
+int builtin_unsetenv(char **args, char *shell, VarList *var_list, int lnum)
 {
 	if (!args[1] || args[2])
 	{
-		erro(lnum, shell, args[0], "VARIABLE", 3);
-		return;
+		return (erro(lnum, shell, args[0], "VARIABLE", 3));
 	}
 	remove_variable(var_list, args[1]);
+	return (0);
 }
 
 /**
@@ -47,32 +63,30 @@ void builtin_unsetenv(char **args, char *shell, VarList *var_list, int lnum)
  * @shell: name of shell executable
  * @var_list: environment variables
  * @lnum: line number
- * Return: -2 (no builtin found), -1 (builtin found), other (exit code)
+ * @ec: exit code output
+ * Return: 0 (no builtin), 1 (builtin ran), -1 (exit)
  */
-int run_builtins(char **args, char *shell, VarList *var_list, int lnum)
+int run_builtins(char **args,
+								 char *shell, VarList *var_list, int lnum, int *ec)
 {
 	int i = 0;
 
-	if (args[0] == NULL)
-		return (-2);
-
+	*ec = 0;
 	if (!_strcmp(args[0], "setenv"))
 	{
-		builtin_setenv(args, shell, var_list, lnum);
-		return (-1);
+		*ec = builtin_setenv(args, shell, var_list, lnum);
+		return (1);
 	}
 	if (!_strcmp(args[0], "unsetenv"))
 	{
-		builtin_unsetenv(args, shell, var_list, lnum);
-		return (-1);
+		*ec = builtin_unsetenv(args, shell, var_list, lnum);
+		return (1);
 	}
-
 	if (!_strcmp(args[0], "env"))
 	{
 		printenv(var_list);
-		return (-1);
+		return (1);
 	}
-
 	if (!_strcmp(args[0], "exit"))
 	{
 		if (args[1])
@@ -80,10 +94,13 @@ int run_builtins(char **args, char *shell, VarList *var_list, int lnum)
 		else
 			i = 0;
 		if (i >= 0)
-			return (i);
-		erro(lnum, shell, args[0], args[1], 2);
-		return (-1);
+		{
+			*ec = i;
+			return (-1);
+		}
+		else
+			erro(lnum, shell, args[0], args[1], 2);
+		return (1);
 	}
-
-	return (-2);
+	return (0);
 }
