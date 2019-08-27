@@ -40,7 +40,7 @@ char *get_input(void);
 char **parse_input(char *, VarList *);
 void print_args(char **);
 int search_path(char *, char *, char **);
-int run_builtins(char **args, char *shell, VarList *var_list, int lnum);
+int run_builtins(char **args, char *shell, VarList *var_list, int lnum, int *);
 void do_alias(char **);
 
 char *str(int, int);

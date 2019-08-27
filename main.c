@@ -60,7 +60,7 @@ int main(int argc, char **argv, char **envp)
 	int line_num = 0;
 	char *input, **args, *file_path, *env_path;
 	VarList variables;
-	int status;
+	int status = 0, b;
 
 	read_envp(&variables, envp);
 	(void)argc;
@@ -74,23 +74,23 @@ int main(int argc, char **argv, char **envp)
 		if (input == NULL) /* end of input reached */
 		{
 			free_list(&variables);
-			return (0);
+			return (status);
 		}
 		args = parse_input(input, &variables);
 		if (args[0] == NULL)
 			continue;
-		status = run_builtins(args, argv[0], &variables, line_num);
-		if (status == -2)
+		b = run_builtins(args, argv[0], &variables, line_num, &status);
+		if (!b)
 		{
 			/*do_alias(args);*/
 			env_path = get_variable(&variables, "PATH")->value;
-			status = search_path(args[0], env_path, &file_path);
-			if (status == 0)
-				executive(args, file_path, &variables);
+			b = search_path(args[0], env_path, &file_path);
+			if (b == 0)
+				status = executive(args, file_path, &variables);
 			else
-				erro(line_num, argv[0], args[0], NULL, status - 1);
+				status = erro(line_num, argv[0], args[0], NULL, b - 1);
 		}
-		else if (status >= 0)
+		else if (b == -1)
 		{
 			free(input);
 			free_list(&variables);
