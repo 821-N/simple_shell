@@ -1,14 +1,26 @@
 #include "shell.h"
 
+/**
+ * _strlen - get length of string
+ * @s: string
+ * Return: length
+ */
 size_t _strlen(char *s)
 {
 	size_t len = 0;
 
-	while (*s++)
-		len++;
+	if (s)
+		while (*s++)
+			len++;
 	return (len);
 }
 
+/**
+ * _memcpy - copy memory
+ * @dest: destination
+ * @source: source
+ * @length: number of bytes
+ */
 void _memcpy(char *dest, char *source, size_t length)
 {
 	while (length-- > 0)
@@ -68,7 +80,7 @@ char **make_envp(VarList *var_list)
 	size_t name_len, value_len;
 	char *env_item;
 
-	while((var_list = var_list->next))
+	while ((var_list = var_list->next))
 	{
 		/* get length of name/value */
 		name_len = _strlen(var_list->name);

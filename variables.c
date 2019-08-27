@@ -1,9 +1,10 @@
 #include "shell.h"
 
-/* Notes about variable lists (VarList):
+/*
+ * Notes about variable lists (VarList):
  *  variables are stored in linked lists.
  *
- *  The first item is special. (& should be statically allocated)
+ *  The first item is special. (should be statically allocated)
  *  .length: number of "real" items in the list
  *  .next: pointer to first "real" item (or NULL)
  *
@@ -13,6 +14,12 @@
  *  .value: value of the variable (malloc'd string)
  */
 
+/**
+ * _strcmp - compare strings
+ * @s1: string1
+ * @s2: string2
+ * Return: 0 if strings are the same
+ */
 int _strcmp(char *s1, char *s2)
 {
 	for (; *s1 == *s2 && *s1; s1++, s2++)
@@ -33,7 +40,7 @@ void free_list(VarList *var_list)
 	VarList *curr = var_list->next, *next;
 
 	var_list->length = 0;
-	while(curr)
+	while (curr)
 	{
 		next = curr->next;
 		free(curr->name);

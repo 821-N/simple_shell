@@ -1,15 +1,15 @@
 #include "shell.h"
 
+/**
+ * myhandle - signal handler
+ * @mysignal: signal
+ */
 void myhandle(int mysignal)
 {
 	if (mysignal == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n$ ", 3);
 		fflush(stdout);
-		return;
-	}
-	if (mysignal ==  SIGTSTP)
-	{
 	}
 }
 
@@ -25,7 +25,7 @@ char *get_input(void)
 	size_t num = sizeof(buf);
 	int linenum;
 	int i = 0;
-	static int exit_next_time = 0;
+	static int exit_next_time;
 
 	if (isatty(STDIN_FILENO))
 		printf("$ ");
@@ -38,7 +38,6 @@ char *get_input(void)
 	}
 
 	linenum = getline(&b, &num, stdin);
-	//printf("linenumber ---> %ld \n", linenum);
 
 	/* end of input */
 	if (linenum == -1)

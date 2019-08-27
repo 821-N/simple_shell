@@ -2,18 +2,18 @@
 
 /**
  * printenv - prints the enviroment
- * @ev: the enviroment
- * Return: void
+ * @var_list: variables
  */
-void printenv(char **ev)
+void printenv(VarList *var_list)
 {
-	int i = 0;
+	VarList *item = var_list;
 
-	while (ev[i])
+	while ((item = item->next))
 	{
-		_puts(ev[i]);
+		_puts(item->name);
+		pchar('=');
+		_puts(item->value);
 		pchar('\n');
-		i++;
 	}
 }
 
@@ -79,7 +79,8 @@ int main(int argc, char **argv, char **envp)
 		args = parse_input(input, &variables);
 		if (args[0] == NULL)
 			continue;
-		if (!run_builtins(args, &variables, envp, argv[0], line_num))
+		status = run_builtins(args, argv[0], &variables, line_num);
+		if (status == -2)
 		{
 			/*do_alias(args);*/
 			env_path = get_variable(&variables, "PATH")->value;
@@ -88,6 +89,11 @@ int main(int argc, char **argv, char **envp)
 				executive(args, file_path, &variables);
 			else
 				erro(line_num, argv[0], args[0], NULL, status - 1);
+		}
+		else if (status >= 0)
+		{
+			free_list(&variables);
+			return (status);
 		}
 	}
 	return (0);
