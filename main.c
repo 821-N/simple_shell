@@ -1,7 +1,10 @@
 #include "shell.h"
 
-global g;
-
+/**
+ * printenv - prints the enviroment
+ * @ev: the enviroment
+ * Return: void
+ */
 void printenv(char **ev)
 {
 	int i = 0;
@@ -18,6 +21,7 @@ void printenv(char **ev)
 /**
  * str - convert a number to a string
  * @num: (should be "small", not INT_MAX or something silly)
+ * @prefixlen: first number
  * Return: a malloc'd string, containing the decimal representation of @num
  */
 char *str(int prefixlen, int num)
@@ -46,6 +50,13 @@ char *str(int prefixlen, int num)
 	return (str);
 }
 
+/**
+ * executive - runs the programs after the search_path
+ * @args: the tokenized arguments from getline
+ * @file_path: the file path of the program
+ * @var_list: the VarList
+ * Return: the status of the fork
+ */
 int executive(char **args, char *file_path, VarList *var_list)
 {
 	pid_t parchild;
@@ -71,55 +82,48 @@ int executive(char **args, char *file_path, VarList *var_list)
 	return (status);
 }
 
+/**
+ * main - the main shell
+ * @argc: the number of arguments
+ * @argv: the arguments
+ * @envp: the enviroment
+ * Return: 0
+ */
 int main(int argc, char **argv, char **envp)
 {
-	char *input, **args, *file_path;
-	char *env_path;
-	int status,i = 0, n = 0;
+	global g;
+	char *input, **args, *file_path, *env_path;
 	VarList variables;
-	read_envp(&variables, envp);
 
+	read_envp(&variables, envp);
 	(void)argc;
 	(void)argv;
-  
 	while (1)
 	{
 		g.c++;
 		signal(SIGINT, myhandle);
 		signal(SIGTSTP, myhandle);
-
-		/* display prompt and get input */
 		input = get_input();
 		if (input == NULL) /* end of input reached */
 		{
 			free_list(&variables);
-			dprintf(STDERR_FILENO,"exiting!");
+			dprintf(STDERR_FILENO, "exiting!");
 			return (0);
 		}
-		/* get list of arguments from input */
 		args = parse_input(input, &variables);
-		//	print_args(args); /* debug */
-
 		if (args[0] == NULL)
 			continue;
-
-		/* check if command is a builtin, and run it */
-		if (!run_builtins(args, &variables, envp))
+		if (!run_builtins(args, &variables, envp, argv[0], g.c))
 		{
-			/* otherwise ... */
-
-			/* check for alias and replace */
-			do_alias(args);
-
-			/* search for command in PATH */
+			/*do_alias(args);*/
 			env_path = get_variable(&variables, "PATH")->value;
-			/* TODO: check if get_variable failed to find PATH */
 			file_path = search_path(args[0], env_path, argv[0], g.c);
 			if (file_path)
 			{
 				printf("Found: %s\n", file_path);
-				status = executive(args, file_path, &variables);
+				executive(args, file_path, &variables);
 			}
 		}
-    }
+	}
+	return (0);
 }

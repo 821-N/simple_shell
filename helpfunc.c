@@ -33,7 +33,7 @@ int put_error(char a)
 char *itoa(int i)
 {
 	static char a[500], b[500], *buf = b;
-	int n = 0, x = 0, save = i;
+	int n = 0, x = 0;
 
 	if (i == 0)
 		return ("0");

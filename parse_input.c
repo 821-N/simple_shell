@@ -7,7 +7,8 @@ char **parse_input(char *input, VarList *var_list)
 	int quote = 0; /* if inside quoted section */
 	char *start = NULL; /* start of arg being parsed */
 
-	for(; *input; input++)
+	(void)var_list;
+	for (; *input; input++)
 	{
 		if ((*input <= ' ' && !quote) || (*input == '"' && quote))
 		{
