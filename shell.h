@@ -15,8 +15,7 @@
  * @length: length of list (first node only)
  * @name: var name
  * @value: var value
- * Betty doesn't support nested structs/unions so it will give warnings here.
- * oh well
+ * Betty doesn't support nested structs/unions :(
  */
 typedef struct VarList
 {
@@ -40,7 +39,7 @@ void printenv(VarList *);
 int builtin(char *args, char **ev);
 void myhandle(int mysignal);
 char *get_input(void);
-char **parse_input(char *, VarList *);
+char **parse_input(char *, VarList *, int);
 void print_args(char **);
 int search_path(char *, char *, char **);
 int run_builtins(char **args, char *shell, VarList *var_list, int lnum, int *);

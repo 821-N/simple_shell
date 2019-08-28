@@ -45,7 +45,7 @@ int executive(char **args, char *file_path, VarList *var_list)
 	wait(&status);
 	free_envp(envp);
 
-	return (status);
+	return (WEXITSTATUS(status));
 }
 
 /**
@@ -75,7 +75,7 @@ int main(int argc, char **argv, char **envp)
 			free_list(&variables);
 			return (status);
 		}
-		args = parse_input(input, &variables);
+		args = parse_input(input, &variables, status);
 		if (args[0] == NULL)
 			continue;
 		b = run_builtins(args, argv[0], &variables, line_num, &status);
