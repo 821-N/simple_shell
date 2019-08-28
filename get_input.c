@@ -27,13 +27,13 @@ char *get_input(void)
 	static int exit_next_time;
 
 	if (isatty(STDIN_FILENO))
-		printf("$ ");
+		_puts("$ ");
 
 	if (exit_next_time)
 	{
 		free(b);
 		if (isatty(STDIN_FILENO))
-			printf("\n");
+			pchar('\n');
 		return (NULL);
 	}
 
@@ -45,7 +45,7 @@ char *get_input(void)
 		free(b);
 		fflush(stdout);
 		if (isatty(STDIN_FILENO))
-			write(STDOUT_FILENO, "\n", 1);
+			pchar('\n');
 		return (NULL);
 	}
 
