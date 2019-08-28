@@ -21,15 +21,9 @@
 typedef struct VarList
 {
 	struct VarList *next;
-	union
-	{
-		struct
-		{
-			char *name;
-			char *value;
-		};
-		size_t length;
-	};
+	char *name;
+	char *value;
+	size_t length;
 } VarList;
 
 int cdfunction(char **args, VarList *var_list);

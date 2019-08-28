@@ -62,9 +62,7 @@ int erro(int linenum, char *argv, char *com, char *exstr, int er_id)
 		er_puts("Illegal number: ");
 		er_puts(exstr);
 		er_puts("\n");
-		if (isatty(STDIN_FILENO))
-			return (2);
-		exit(2);
+		return (2);
 	}
 	else if (er_id == 3)
 	{
@@ -80,9 +78,7 @@ int erro(int linenum, char *argv, char *com, char *exstr, int er_id)
 		er_puts("can't cd to ");
 		er_puts(exstr);
 		er_puts("\n");
-		if (isatty(STDIN_FILENO))
-			return (2);
-		exit(2);
+		return (2);
 	}
 	return (0);
 }

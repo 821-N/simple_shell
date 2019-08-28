@@ -98,13 +98,13 @@ int run_builtins(char **args,
 			*ec = i;
 			return (-1);
 		}
-		else
-			erro(lnum, shell, args[0], args[1], 2);
+		*ec = erro(lnum, shell, args[0], args[1], 2);
 		return (1);
 	}
 	if (!_strcmp(args[0], "cd"))
 	{
-		if (cdfunction(args, var_list) < 0)
+		*ec = cdfunction(args, var_list);
+		if (*ec < 0)
 			erro(lnum, shell, args[0], args[1], 4);
 		return (1);
 	}
@@ -119,7 +119,7 @@ int run_builtins(char **args,
 int cdfunction(char **args, VarList *var_list)
 {
 	int cdstat;
-	char *file_path;
+	char *file_path, path[PATH_MAX];
 
 	if (args[1] == NULL || !_strcmp(args[1], "$HOME"))
 	{
@@ -129,9 +129,17 @@ int cdfunction(char **args, VarList *var_list)
 	else if (!_strcmp(args[1], "-"))
 	{
 		file_path = get_variable(var_list, "OLDPWD")->value;
-		cdstat = chdir(file_path);
+		if (file_path != NULL)
+		{
+			er_puts(file_path);
+			er_puts("\n");
+			cdstat = chdir(file_path);
+		}
 	}
 	else
 		cdstat = chdir(args[1]);
+	getcwd(path, PATH_MAX);
+	set_variable(var_list, "OLDPWD", get_variable(var_list, "PWD")->value);
+	set_variable(var_list, "PWD", path);
 	return (cdstat);
 }
