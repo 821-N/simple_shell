@@ -84,6 +84,8 @@ int run_builtins(char **args,
 	}
 	if (!_strcmp(args[0], "env"))
 	{
+		if (args[1] != NULL)
+			return (0);
 		printenv(var_list);
 		return (1);
 	}
@@ -91,8 +93,6 @@ int run_builtins(char **args,
 	{
 		if (args[1])
 			i = parse_number(args[1]);
-		else
-			i = 0;
 		if (i >= 0)
 		{
 			*ec = i;
@@ -102,5 +102,36 @@ int run_builtins(char **args,
 			erro(lnum, shell, args[0], args[1], 2);
 		return (1);
 	}
+	if (!_strcmp(args[0], "cd"))
+	{
+		if (cdfunction(args, var_list) < 0)
+			erro(lnum, shell, args[0], args[1], 4);
+		return (1);
+	}
 	return (0);
+}
+/**
+ * cdfunction - cd builtin
+ * @args: the arguments
+ * @var_list: env variables
+ * Return: cdstatus
+ */
+int cdfunction(char **args, VarList *var_list)
+{
+	int cdstat;
+	char *file_path;
+
+	if (args[1] == NULL || !_strcmp(args[1], "$HOME"))
+	{
+		file_path = get_variable(var_list, "HOME")->value;
+		cdstat = chdir(file_path);
+	}
+	else if (!_strcmp(args[1], "-"))
+	{
+		file_path = get_variable(var_list, "OLDPWD")->value;
+		cdstat = chdir(file_path);
+	}
+	else
+		cdstat = chdir(args[1]);
+	return (cdstat);
 }

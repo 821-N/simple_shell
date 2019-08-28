@@ -1,6 +1,7 @@
 #ifndef SHELL_H
 #define SHELL_H
 
+#include <stdarg.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -31,6 +32,8 @@ typedef struct VarList
 	};
 } VarList;
 
+int cdfunction(char **args, VarList *var_list);
+void err_vaputs(int dnothing, ...);
 int put_error(char a);
 int _strcmp(char *, char *);
 int _atoi(char *a);

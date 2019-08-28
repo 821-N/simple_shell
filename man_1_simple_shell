@@ -1,0 +1,28 @@
+.TH man 1 "27 August 2019" "1.0" "simple shell man page"
+
+.SH NAME
+Holberton Simple Shell (hsh)
+.SH SYNOPSIS
+.B ./hsh
+[command][arguments ...]
+./SH OVERVIEW
+hsh takes input from stdin and tokenizes it. Then it finds and executes builtins, as well as commands by searching through the $PATH. it can be used in interactive as well as non-interactive mode.
+.SH DESCRIPTION
+hsh is the custom built shell that resembles sh, created as a final project for the first trimester at Holberton.
+.SH BUILT-INS
+
+.B -exit
+exits hsh with an exit code
+
+.B -env
+prints the Environment
+
+.B -cd
+change the directory
+
+.SH EXIT_CODES
+in non-interactive mode the shell return the exit status of the last command executed. hsh has been fashioned to have similar error codes in comparison to sh.
+.SH BUGS
+there are a few bugs with returning the right error code, other then that no known errors.
+.SH AUTHOR
+Christian Williams & Nathaniel Marofsky
