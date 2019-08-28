@@ -71,7 +71,6 @@ int run_builtins(char **args,
 {
 	int i = 0;
 
-	*ec = 0;
 	if (!_strcmp(args[0], "setenv"))
 	{
 		*ec = builtin_setenv(args, shell, var_list, lnum);
@@ -84,15 +83,15 @@ int run_builtins(char **args,
 	}
 	if (!_strcmp(args[0], "env"))
 	{
-		if (args[1] != NULL)
-			return (0);
+		*ec = 0;
 		printenv(var_list);
 		return (1);
 	}
 	if (!_strcmp(args[0], "exit"))
 	{
-		if (args[1])
-			i = parse_number(args[1]);
+		if (!args[1])
+			return (-1);
+		i = parse_number(args[1]);
 		if (i >= 0)
 		{
 			*ec = i;
