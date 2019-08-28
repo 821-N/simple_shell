@@ -22,7 +22,7 @@ char *_copy(char *dest, char *source, size_t length)
  */
 void _strcpy(char *dest, char *source)
 {
-	while((*dest++ = *source++))
+	while ((*dest++ = *source++))
 		;
 }
 
@@ -34,7 +34,7 @@ void _strcpy(char *dest, char *source)
  */
 char *_strchr(char *str, char c)
 {
-	for(; *str; str++)
+	for (; *str; str++)
 	{
 		if (*str == c)
 			return (str);
@@ -46,60 +46,49 @@ char *_strchr(char *str, char c)
  * search_path - searches path for program
  * @command: the command
  * @env_path: PATH
- * @av: argument
- * @lnum: linenumber
- * Return: filepath or NULL
+ * @filepath_out: pointer to file path output
+ * Return: 0 (ok), 1 (file not found), 2 (permission error)
  */
-char *search_path(char *command, char *env_path, char *av, int lnum)
+int search_path(char *command, char *env_path, char **filepath_out)
 {
 	static char filepath[PATH_MAX];
 	char *start = env_path;
 	ssize_t path_length;
+	int found_file = 0;
 
-	if (command == NULL)
-		return (NULL);
 	if (_strchr(command, '/'))
-	{
-		if (access(command, F_OK) != 0)
-		{
-			erro(lnum, av, command, NULL, 0);
-			return (NULL);
+	{ /* If command contains a slash, don't check PATH */
+		if (access(command, F_OK) == 0)
+		{	/* If file exists: */
+			found_file = 1;
+			if (access(command, X_OK) == 0)
+			{ /* If can be executed: */
+				*filepath_out = command;
+				return (0);
+			}
 		}
-		if (access(command, X_OK) == 0)
-			return (command);
-		else
-			erro(lnum, av, command, NULL, 1);
-		return (NULL);
 	}
-	while (1)
-	{
-		if (*env_path == ':' || *env_path == '\0')
-		{
-			path_length = env_path - start;
-			if (path_length)
+	else
+		for (; ; ++env_path)
+			if (*env_path == ':' || *env_path == '\0')
 			{
+				path_length = env_path - start;
 				_copy(filepath, start, path_length);
-				filepath[path_length] = '/';
-				path_length++;
+				if (path_length)
+					filepath[path_length++] = '/';
+				_strcpy(filepath + path_length, command);
+				if (access(filepath, F_OK) == 0) /* Check file */
+				{
+					found_file = 1;
+					if (access(filepath, X_OK) == 0)
+					{
+						*filepath_out = filepath;
+						return (0);
+					}
+				}
+				if (*env_path == '\0')
+					break; /* reached end of PATH */
+				start = env_path + 1;
 			}
-			_strcpy(filepath + path_length, command);
-			if (access(command, F_OK) != 0 && *env_path == '\0')
-			{
-				erro(lnum, av, command, NULL, 0);
-				return (NULL);
-			}
-			if (access(filepath, X_OK) == 0)
-				return (filepath);
-			else if (access(command, F_OK) == 0)
-			{
-				erro(lnum, av, command, NULL, 1);
-				return (NULL);
-			}
-			if (*env_path == '\0')
-				break; /* reached end without finding anything */
-			start = env_path + 1;
-		}
-		++env_path;
-	}
-	return (NULL);
+	return (1 + found_file); /* needed to save lines */
 }

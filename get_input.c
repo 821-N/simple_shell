@@ -1,15 +1,15 @@
 #include "shell.h"
 
+/**
+ * myhandle - signal handler
+ * @mysignal: signal
+ */
 void myhandle(int mysignal)
 {
 	if (mysignal == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n$ ", 3);
 		fflush(stdout);
-		return;
-	}
-	if (mysignal ==  SIGTSTP)
-	{
 	}
 }
 
@@ -20,29 +20,29 @@ void myhandle(int mysignal)
  */
 char *get_input(void)
 {
-	static char buf[5000];
-	char *b = buf;
-	size_t num = sizeof(buf);
-	int linenum;
+	char *b = NULL;
+	size_t num = 0;
+	ssize_t length;
 	int i = 0;
-	static int exit_next_time = 0;
+	static int exit_next_time;
 
 	if (isatty(STDIN_FILENO))
 		printf("$ ");
 
 	if (exit_next_time)
 	{
+		free(b);
 		if (isatty(STDIN_FILENO))
 			printf("\n");
 		return (NULL);
 	}
 
-	linenum = getline(&b, &num, stdin);
-	//printf("linenumber ---> %ld \n", linenum);
+	length = getline(&b, &num, stdin);
 
-	/* end of input */
-	if (linenum == -1)
+	/* end of input (or allocation failed)*/
+	if (length == -1)
 	{
+		free(b);
 		fflush(stdout);
 		if (isatty(STDIN_FILENO))
 			write(STDOUT_FILENO, "\n", 1);
@@ -50,10 +50,10 @@ char *get_input(void)
 	}
 
 	/* Check if input didn't end in \n */
-	for (i = 0; buf[i]; i++)
+	for (i = 0; b[i]; i++)
 		;
-	if (i > 0 && buf[i - 1] != '\n')
+	if (i > 0 && b[i - 1] != '\n')
 		exit_next_time = 1;
 
-	return (buf);
+	return (b);
 }

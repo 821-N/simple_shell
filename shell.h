@@ -1,12 +1,6 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-typedef struct global
-{
-	int c;
-} global;
-
-#include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -14,10 +8,22 @@ typedef struct global
 #include <sys/wait.h>
 #include <limits.h>
 
-typedef struct VarList {
+/**
+ * struct VarList - node of linked list for storing env vars. See variables.c
+ * @next: pointer to next node
+ * @length: length of list (first node only)
+ * @name: var name
+ * @value: var value
+ * Betty doesn't support nested structs/unions so it will give warnings here.
+ * oh well
+ */
+typedef struct VarList
+{
 	struct VarList *next;
-	union {
-		struct {
+	union
+	{
+		struct
+		{
 			char *name;
 			char *value;
 		};
@@ -33,14 +39,14 @@ char *itoa(int i);
 void er_puts(char *a);
 int pchar(char a);
 void _puts(char *a);
-void printenv(char **ev);
+void printenv(VarList *);
 int builtin(char *args, char **ev);
 void myhandle(int mysignal);
 char *get_input(void);
 char **parse_input(char *, VarList *);
 void print_args(char **);
-char *search_path(char *, char *, char *, int);
-int run_builtins(char **args, VarList *var_list, char **ev, char *av, int lnum);
+int search_path(char *, char *, char **);
+int run_builtins(char **args, char *shell, VarList *var_list, int lnum, int *);
 void do_alias(char **);
 
 char *str(int, int);
@@ -52,7 +58,9 @@ void pid_envp(char **, pid_t);
 
 void free_list(VarList *);
 VarList *get_variable(VarList *, char *);
-int remove_varible(VarList*, char *);
+int remove_variable(VarList*, char *);
 void set_variable(VarList*, char *, char *);
+
+void *safe_malloc(size_t);
 
 #endif

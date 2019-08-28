@@ -2,52 +2,19 @@
 
 /**
  * printenv - prints the enviroment
- * @ev: the enviroment
- * Return: void
+ * @var_list: variables
  */
-void printenv(char **ev)
+void printenv(VarList *var_list)
 {
-	int i = 0;
+	VarList *item = var_list;
 
-
-	while (ev[i])
+	while ((item = item->next))
 	{
-		_puts(ev[i]);
+		_puts(item->name);
+		pchar('=');
+		_puts(item->value);
 		pchar('\n');
-		i++;
 	}
-}
-
-/**
- * str - convert a number to a string
- * @num: (should be "small", not INT_MAX or something silly)
- * @prefixlen: first number
- * Return: a malloc'd string, containing the decimal representation of @num
- */
-char *str(int prefixlen, int num)
-{
-	int digits = 0, temp = num, sign = num < 0;
-	char *str;
-
-	while (temp)
-	{
-		digits++;
-		temp /= 10;
-	}
-	str = malloc(prefixlen + sign + digits + 1);
-	/* TODO: check if malloc failed */
-	str[prefixlen + sign + digits] = '\0';
-	if (sign)
-	{
-		num = -num;
-		str[prefixlen] = '-';
-	}
-	while (--digits >= 0)
-	{
-		str[prefixlen + sign + digits] = num % 10 + '0';
-		num /= 10;
-	}
-	return (str);
 }
 
 /**
@@ -71,7 +38,6 @@ int executive(char **args, char *file_path, VarList *var_list)
 
 	if (parchild == 0)
 	{
-		printf("child process, %s\n", args[0]);
 		status = execve(file_path, args, envp);
 		_exit(status);
 	}
@@ -91,39 +57,44 @@ int executive(char **args, char *file_path, VarList *var_list)
  */
 int main(int argc, char **argv, char **envp)
 {
-	global g;
+	int line_num = 0;
 	char *input, **args, *file_path, *env_path;
 	VarList variables;
+	int status = 0, b;
 
 	read_envp(&variables, envp);
 	(void)argc;
-	(void)argv;
 	while (1)
 	{
-		g.c++;
+		line_num++;
 		signal(SIGINT, myhandle);
 		signal(SIGTSTP, myhandle);
 		input = get_input();
 		if (input == NULL) /* end of input reached */
 		{
 			free_list(&variables);
-			dprintf(STDERR_FILENO, "exiting!");
-			return (0);
+			return (status);
 		}
 		args = parse_input(input, &variables);
 		if (args[0] == NULL)
 			continue;
-		if (!run_builtins(args, &variables, envp, argv[0], g.c))
-		{
-			/*do_alias(args);*/
+		b = run_builtins(args, argv[0], &variables, line_num, &status);
+		if (!b)
+		{ /*do_alias(args);*/
 			env_path = get_variable(&variables, "PATH")->value;
-			file_path = search_path(args[0], env_path, argv[0], g.c);
-			if (file_path)
-			{
-				printf("Found: %s\n", file_path);
-				executive(args, file_path, &variables);
-			}
+			b = search_path(args[0], env_path, &file_path);
+			if (b == 0)
+				status = executive(args, file_path, &variables);
+			else
+				status = erro(line_num, argv[0], args[0], NULL, b - 1);
 		}
+		else if (b == -1)
+		{
+			free(input);
+			free_list(&variables);
+			return (status);
+		}
+		free(input);
 	}
 	return (0);
 }
