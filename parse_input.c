@@ -7,6 +7,8 @@
  * @arglist: arglist
  * @quote: if inside quote
  * @argi: pointer to arg index
+ * @var_list: variables
+ * @num: exit code
  * Return: if comment encountered
  */
 int push_arg(char *start, char *end, char **arglist, int quote, int *argi,
@@ -15,11 +17,13 @@ int push_arg(char *start, char *end, char **arglist, int quote, int *argi,
 	static char num_buffer[10];
 	int bufp = 10;
 
-	if(!quote && *start == '#')
+	if (!quote && *start == '#')
 		return (1);
 	*end = '\0';
-	if(*start == '$'){
-		if(start[1]=='?' && !start[2]){
+	if (*start == '$')
+	{
+		if (start[1] == '?' && !start[2])
+		{
 			num_buffer[--bufp] = '\0';
 			while (num || bufp == 9)
 			{
@@ -27,9 +31,11 @@ int push_arg(char *start, char *end, char **arglist, int quote, int *argi,
 				num /= 10;
 			}
 			start = num_buffer + bufp;
-		}else{
-			var_list = get_variable(var_list, start+1);
-			if(var_list)
+		}
+		else
+		{
+			var_list = get_variable(var_list, start + 1);
+			if (var_list)
 				start = var_list->value;
 			else
 				start = NULL;
@@ -47,6 +53,7 @@ int push_arg(char *start, char *end, char **arglist, int quote, int *argi,
  * parse_input - parse input command
  * @input: input
  * @var_list: env vars
+ * @code: exit code
  * Return: array of argument strings
  */
 char **parse_input(char *input, VarList *var_list, int code)
