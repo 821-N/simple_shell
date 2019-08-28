@@ -7,10 +7,7 @@
 void myhandle(int mysignal)
 {
 	if (mysignal == SIGINT)
-	{
-		write(STDOUT_FILENO, "\n$ ", 3);
-		fflush(stdout);
-	}
+		er_puts("\n$ ");
 }
 
 /**
@@ -27,13 +24,13 @@ char *get_input(void)
 	static int exit_next_time;
 
 	if (isatty(STDIN_FILENO))
-		_puts("$ ");
+		er_puts("$ ");
 
 	if (exit_next_time)
 	{
 		free(b);
 		if (isatty(STDIN_FILENO))
-			pchar('\n');
+			er_puts("\n");
 		return (NULL);
 	}
 
@@ -45,7 +42,7 @@ char *get_input(void)
 		free(b);
 		fflush(stdout);
 		if (isatty(STDIN_FILENO))
-			pchar('\n');
+			er_puts("\n");
 		return (NULL);
 	}
 
