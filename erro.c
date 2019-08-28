@@ -25,8 +25,6 @@ void er_puts(char *a)
 {
 	int len = 0;
 
-	if (a == NULL)
-		return;
 	while (a[len])
 		len++;
 	write(STDERR_FILENO, a, len);
@@ -43,9 +41,12 @@ void er_puts(char *a)
  */
 int erro(int linenum, char *argv, char *com, char *exstr, int er_id)
 {
-	err_vaputs(2, argv, ": ");
+	er_puts(argv);
+	er_puts(": ");
 	er_num(linenum);
-	err_vaputs(3, ": ", com, ": ");
+	er_puts(": ");
+	er_puts(com);
+	er_puts(": ");
 	if (er_id == 0)
 	{
 		er_puts("not found\n");
@@ -58,19 +59,27 @@ int erro(int linenum, char *argv, char *com, char *exstr, int er_id)
 	}
 	else if (er_id == 2)
 	{
-		err_vaputs(3, "Illegal number: ", exstr, "\n");
+		er_puts("Illegal number: ");
+		er_puts(exstr);
+		er_puts("\n");
 		if (isatty(STDIN_FILENO))
 			return (2);
 		exit(2);
 	}
 	else if (er_id == 3)
 	{
-		err_vaputs(4, "Usage: ", com, " ", exstr, "\n");
+		er_puts("Usage: ");
+		er_puts(com);
+		er_puts(" ");
+		er_puts(exstr);
+		er_puts("\n");
 		return (1);
 	}
 	else if (er_id == 4)
 	{
-		err_vaputs(3, "can't cd to ", exstr, "\n");
+		er_puts("can't cd to ");
+		er_puts(exstr);
+		er_puts("\n");
 		if (isatty(STDIN_FILENO))
 			return (2);
 		exit(2);

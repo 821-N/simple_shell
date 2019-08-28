@@ -40,24 +40,3 @@ void *safe_malloc(size_t size)
 	}
 	return (x);
 }
-/**
- * err_vaputs - prints many strings out to stderr
- * @dnothing: does nothing yet
- * Return: void
- */
-void err_vaputs(int dnothing, ...)
-{
-	va_list args;
-	char *print;
-
-	va_start(args, dnothing);
-	while (dnothing > 0)
-	{
-		print = va_arg(args, char *);
-		if (print == NULL)
-			break;
-		er_puts(print);
-		dnothing--;
-	}
-	va_end(args);
-}
