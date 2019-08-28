@@ -9,7 +9,7 @@ void er_num(int num)
 	char buffer[10];
 	int bufp = 10;
 
-	while (num)
+	while (num || bufp == 10)
 	{
 		buffer[--bufp] = num % 10 + '0';
 		num /= 10;
