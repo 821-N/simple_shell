@@ -51,7 +51,7 @@ int push_arg(char *start, char *end, char **arglist, int quote, int *argi,
  */
 char **parse_input(char *input, VarList *var_list, int code)
 {
-	static char *arglist[1000];
+	static char *arglist[10000]; /* realy big lol */
 	int argi = 0; /* number of args */
 	int quote = 0; /* if inside quoted section */
 	char *start = NULL; /* start of arg being parsed */
