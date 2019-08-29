@@ -24,5 +24,24 @@ change the directory
 in non-interactive mode the shell return the exit status of the last command executed. hsh has been fashioned to have similar error codes in comparison to sh.
 .SH BUGS
 there are a few bugs with returning the right error code, other then that no known errors.
+
+.SH EXAMPLE
+
+
+root@bash:$ ./hsh
+.br
+(hsh)$ ls
+.br
+file
+dir
+.br 
+(hsh)$ invalid-command
+.br
+/hsh: 1: invalid-command: not found
+.br
+(hsh)$ exit
+.br 
+root@bash:$
+
 .SH AUTHOR
 Christian Williams & Nathaniel Marofsky
