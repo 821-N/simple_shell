@@ -85,7 +85,7 @@ int remove_variable(VarList *var_list, char *name)
 			var_list->length--;
 			return (1);
 		}
-		prev = curr->next;
+		prev = curr;
 	}
 	return (0);
 }
@@ -107,14 +107,14 @@ void set_variable(VarList *var_list, char *name, char *value)
 	{
 		/* replace old value */
 		free(item->value);
-		item->value = strdup(value);
+		item->value = _strdup(value);
 	}
 	else /* otherwise create new variable: */
 	{
 		/* create new linked list node */
 		item = safe_malloc(sizeof(VarList));
-		item->name = strdup(name);
-		item->value = strdup(value);
+		item->name = _strdup(name);
+		item->value = _strdup(value);
 		/* insert into list, after head */
 		item->next = var_list->next;
 		var_list->next = item;

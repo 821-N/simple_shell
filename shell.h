@@ -58,5 +58,6 @@ int remove_variable(VarList*, char *);
 void set_variable(VarList*, char *, char *);
 
 void *safe_malloc(size_t);
+char *_strdup(char *);
 
 #endif

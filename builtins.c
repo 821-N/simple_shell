@@ -53,6 +53,7 @@ int builtin_unsetenv(char **args, char *shell, VarList *var_list, int lnum)
 	{
 		return (erro(lnum, shell, args[0], "VARIABLE", 3));
 	}
+	//(void)var_list;
 	remove_variable(var_list, args[1]);
 	return (0);
 }
@@ -119,7 +120,16 @@ int cdfunction(char **args, VarList *var_list)
 {
 	int cdstat;
 	char *file_path, path[PATH_MAX];
+	VarList *var;
 
+	var = get_variable(var_list, "PWD");
+	if (var)
+		set_variable(var_list, "OLDPWD", var->value);
+	else
+	{
+		getcwd(path, PATH_MAX);
+		set_variable(var_list, "OLDPWD", path);
+	}
 	if (args[1] == NULL || !_strcmp(args[1], "$HOME"))
 	{
 		file_path = get_variable(var_list, "HOME")->value;
@@ -128,17 +138,13 @@ int cdfunction(char **args, VarList *var_list)
 	else if (!_strcmp(args[1], "-"))
 	{
 		file_path = get_variable(var_list, "OLDPWD")->value;
-		if (file_path != NULL)
-		{
-			er_puts(file_path);
-			er_puts("\n");
-			cdstat = chdir(file_path);
-		}
+		er_puts(file_path);
+		er_puts("\n");
+		cdstat = chdir(file_path);
 	}
 	else
 		cdstat = chdir(args[1]);
 	getcwd(path, PATH_MAX);
-	set_variable(var_list, "OLDPWD", get_variable(var_list, "PWD")->value);
 	set_variable(var_list, "PWD", path);
 	return (cdstat);
 }
