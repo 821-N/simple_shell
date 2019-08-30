@@ -53,7 +53,6 @@ int builtin_unsetenv(char **args, char *shell, VarList *var_list, int lnum)
 	{
 		return (erro(lnum, shell, args[0], "VARIABLE", 3));
 	}
-	//(void)var_list;
 	remove_variable(var_list, args[1]);
 	return (0);
 }

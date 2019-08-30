@@ -57,10 +57,9 @@ int executive(char **args, char *file_path, VarList *var_list)
  */
 int main(int argc, char **argv, char **envp)
 {
-	int line_num = 0;
 	char *input, **args, *file_path;
 	VarList variables;
-	int status = 0, b;
+	int line_num = 0, status = 0, b;
 	VarList *path_var;
 
 	read_envp(&variables, envp);
