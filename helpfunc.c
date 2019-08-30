@@ -40,3 +40,22 @@ void *safe_malloc(size_t size)
 	}
 	return (x);
 }
+
+/**
+ * _strdup - strdup
+ * @s: string
+ * Return: copy of @s
+ */
+char *_strdup(char *s)
+{
+	size_t len;
+	char *new;
+
+	for (len = 0; s[len]; len++)
+		;
+	new = safe_malloc(len + 1);
+	len = 0;
+	while ((new[len++] = *s++))
+		;
+	return (new);
+}

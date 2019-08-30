@@ -20,7 +20,7 @@ int push_arg(char *start, char *end, char **arglist, int quote, int *argi,
 	if (!quote && *start == '#')
 		return (1);
 	*end = '\0';
-	if (*start == '$')
+	if (*start == '$' && start[1])
 	{
 		if (start[1] == '?' && !start[2])
 		{

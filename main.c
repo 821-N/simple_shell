@@ -57,10 +57,10 @@ int executive(char **args, char *file_path, VarList *var_list)
  */
 int main(int argc, char **argv, char **envp)
 {
-	int line_num = 0;
-	char *input, **args, *file_path, *env_path;
+	char *input, **args, *file_path;
 	VarList variables;
-	int status = 0, b;
+	int line_num = 0, status = 0, b;
+	VarList *path_var;
 
 	read_envp(&variables, envp);
 	(void)argc;
@@ -81,8 +81,8 @@ int main(int argc, char **argv, char **envp)
 		b = run_builtins(args, argv[0], &variables, line_num, &status);
 		if (!b)
 		{ /*do_alias(args);*/
-			env_path = get_variable(&variables, "PATH")->value;
-			b = search_path(args[0], env_path, &file_path);
+			path_var = get_variable(&variables, "PATH");
+			b = search_path(args[0], path_var ? path_var->value : "", &file_path);
 			if (b == 0)
 				status = executive(args, file_path, &variables);
 			else
