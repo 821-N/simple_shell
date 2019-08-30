@@ -129,10 +129,11 @@ int cdfunction(char **args, VarList *var_list)
 		getcwd(path, PATH_MAX);
 		set_variable(var_list, "OLDPWD", path);
 	}
-	if (args[1] == NULL || !_strcmp(args[1], "$HOME"))
+	if (args[1] == NULL)
 	{
-		file_path = get_variable(var_list, "HOME")->value;
-		cdstat = chdir(file_path);
+		var = get_variable(var_list, "HOME");
+		if (var)
+			cdstat = chdir(var->value);
 	}
 	else if (!_strcmp(args[1], "-"))
 	{
